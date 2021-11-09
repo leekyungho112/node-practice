@@ -1,47 +1,25 @@
-# 백엔드의 기초지식과 api 연습을 위한 코드
-
-### node express
-
-- req(request)에는 서버에 data등을 담아서 요청한다.
-- res(response)는 요청한 data등을 받아서 해당하는 작업을 수행하고 웹브라우저에게 보내줄 응답을 수행한다.
-
-```js
 const express = require('express');
 const app = express();
 const port = 3000;
 
+const db = [
+  { id: 1, title: 'item1' },
+  { id: 2, title: 'item2' },
+  { id: 3, title: 'item3' },
+  { id: 4, title: 'item4' },
+];
+const cors = require('cors');
+app.use(cors());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 // http://localhost:3000
 // 이 뒤에 부터 /~~로 해당하는 url을 만들수 있다.
 app.get('/', (req, res) => {
-  res.send('Hello World~!');
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
-```
-
-- \_\_dirname은 app.js(쓰고 있는 자바스크립트)의 현재경로로 그 경로에 + /views/index.html
-
-```js
-app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 });
-```
 
-```js
-//어떠한 데이터를 추가할때 param를 이용하는 방법
-app.get('/db/:title', (req, res) => {
-  const title = req.params.title;
-  db.push({
-    id: db.length + 1,
-    title,
-  });
-  res.send('정상적으로 완료되었습니다.');
-});
-```
-
-```js
 app.get('/db', (req, res) => {
   res.send(db);
 });
@@ -82,8 +60,11 @@ app.post('/delete-db', (req, res) => {
   // db.splice(id - 1, 1);
   res.send(data);
 });
-```
 
-- url이름으로 구분짓지 않고 http메소드를 활용한 rest api를 활용하여 표현력을 높이고 url은 통일할수 있다.
-- create: post ,update: put or patch, delete: delete
-- app.post('/db') , app.put('/db') , app.delete('/db')
+//url이름으로 구분짓지 않고 http메소드를 활용한 rest api를 활용하여 표현력을 높이고 url은 통일할수 있다.
+// create: post ,update: put or patch, delete: delete
+// app.post('/db') ,  app.put('/db') , app.delete('/db')
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
+});
